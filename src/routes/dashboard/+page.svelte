@@ -1,11 +1,11 @@
 <script lang="ts">
-	import data from './data.js';
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/index';
 	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import SectionCards from '$lib/components/section-cards.svelte';
 	import ChartAreaInteractive from '$lib/components/chart-area-interactive.svelte';
-	import DataTable from '$lib/components/data-table/data-table.svelte';
+	import { OrderTable } from '$lib/components/order-table';
+	import { ordersStore } from '$lib/dashboard/payments-data';
 </script>
 
 <Sidebar.Provider
@@ -21,7 +21,14 @@
 					<div class="px-4 lg:px-6">
 						<ChartAreaInteractive />
 					</div>
-					<DataTable {data} />
+					<div class="px-4 lg:px-6">
+						<h2 class="mb-2 text-lg font-semibold">Payments Orders</h2>
+						{#if $ordersStore === undefined}
+							<p class="text-sm text-muted-foreground">Loading…</p>
+						{:else}
+							<OrderTable orders={$ordersStore ?? []} />
+						{/if}
+					</div>
 				</div>
 			</div>
 		</div>
