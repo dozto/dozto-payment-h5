@@ -10,7 +10,9 @@ export async function syncPaymentsFromApi(options?: {
 }): Promise<void> {
 	if (!browser) return;
 	const baseUrl = options?.baseUrl ?? PUBLIC_PAYMENTS_API_URL;
-	const fetchFn = options?.fetch ?? (typeof globalThis !== 'undefined' && 'fetch' in globalThis ? globalThis.fetch : undefined);
+	const fetchFn =
+		options?.fetch ??
+		(typeof globalThis !== 'undefined' && 'fetch' in globalThis ? globalThis.fetch : undefined);
 	if (!fetchFn) return;
 	const { orders } = await getPayments(baseUrl, undefined, fetchFn);
 	for (const o of orders) {

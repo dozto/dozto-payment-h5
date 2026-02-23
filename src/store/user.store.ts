@@ -4,7 +4,7 @@ import { browser } from '$app/environment';
 export interface User {
 	name: string;
 	email: string;
-	avatar: string;
+	avatar?: string;
 }
 
 // 从 localStorage 恢复初始值
@@ -15,8 +15,7 @@ const getInitialUser = (): User | null => {
 		? JSON.parse(stored)
 		: {
 				name: 'Guest',
-				email: 'guest@example.com',
-				avatar: 'https://ui.shadcn.com/avatar.png'
+				email: 'guest@example.com'
 			};
 };
 

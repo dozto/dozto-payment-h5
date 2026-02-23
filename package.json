@@ -49,6 +49,7 @@
 	},
 	"dependencies": {
 		"dexie": "^4.3.0",
-		"mode-watcher": "^1.1.0"
+		"mode-watcher": "^1.1.0",
+		"socket.io-client": "^4.8.3"
 	}
 }
