@@ -50,6 +50,7 @@
 	"dependencies": {
 		"dexie": "^4.3.0",
 		"mode-watcher": "^1.1.0",
+		"qr-scanner": "^1.4.2",
 		"socket.io-client": "^4.8.3"
 	}
 }
