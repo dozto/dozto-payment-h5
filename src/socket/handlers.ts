@@ -9,7 +9,6 @@ export function connect(socketUrl: string, orgId: string): Socket | null {
 	socket = io(url, {
 		auth: { orgId }
 	});
-	console.log('[socket] connected.');
 	return socket;
 }
 

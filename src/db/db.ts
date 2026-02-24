@@ -1,7 +1,8 @@
 import Dexie, { type Table } from 'dexie';
-import type { Order, Transaction } from './types.js';
+import { env } from '$env/dynamic/public';
+import type { Order, Transaction } from '$types/payments.js';
 
-const DB_NAME = 'dozto-payment-h5';
+const DB_NAME = env.PUBLIC_DB_NAME ?? 'dozto-payment-h5';
 
 export class AppDexie extends Dexie {
 	orders!: Table<Order, string>;

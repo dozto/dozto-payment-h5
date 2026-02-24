@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { alertStore } from './alert-store.js';
+	import { alertStore, alertActions } from '$store/alert.store.js';
 	import { Alert, AlertTitle, AlertDescription } from '$lib/components/ui/alert/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 </script>
@@ -18,7 +18,7 @@
 					variant="ghost"
 					size="icon"
 					class="size-6 shrink-0"
-					onclick={() => alertStore.dismiss(item.id)}
+					onclick={() => alertActions.dismiss(item.id)}
 					aria-label="关闭"
 				>
 					×

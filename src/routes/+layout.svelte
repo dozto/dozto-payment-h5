@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import { initDb } from '$lib/db';
-	import { GlobalAlertStack } from '$lib/alert';
-	import { initSocket } from '$lib/socket';
+	import { initDb } from '$db';
+	import AlertGlobal from '$lib/components/alert-global.svelte';
+	import { initSocket } from '$socket';
 	import { ModeWatcher } from 'mode-watcher';
 
 	let { children } = $props();
@@ -16,6 +16,6 @@
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
-<GlobalAlertStack />
+<AlertGlobal />
 <ModeWatcher />
 {@render children()}

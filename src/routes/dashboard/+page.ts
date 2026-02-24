@@ -1,6 +1,11 @@
-import { syncPaymentsFromApi } from '$lib/dashboard/payments-data';
+import { syncPaymentsFromAPI } from '$service/order-sync.service.js';
 
 export async function load({ fetch }) {
-	await syncPaymentsFromApi({ fetch });
-	return {};
+	try {
+		await syncPaymentsFromAPI({ fetch });
+		return { syncError: false };
+	} catch (err) {
+		console.error('[dashboard] syncPaymentsFromAPI failed', err);
+		return { syncError: true };
+	}
 }

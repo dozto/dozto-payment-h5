@@ -9,7 +9,12 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$store: 'src/store',
-			$config: 'src/config'
+			$config: 'src/config',
+			$service: 'src/service',
+			$types: 'src/types',
+			$api: 'src/api',
+			$db: 'src/db',
+			$socket: 'src/socket'
 		}
 	}
 };

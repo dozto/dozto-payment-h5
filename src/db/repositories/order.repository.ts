@@ -1,5 +1,5 @@
 import { getDb } from '../db.js';
-import type { Order } from '../types';
+import type { Order } from '$types/payments.js';
 
 const ordersTable = () => getDb().orders;
 
@@ -9,6 +9,10 @@ export async function get(id: string): Promise<Order | undefined> {
 
 export async function put(order: Order): Promise<void> {
 	await ordersTable().put(order);
+}
+
+export async function bulkPut(orders: Order[]): Promise<void> {
+	await ordersTable().bulkPut(orders);
 }
 
 export async function add(order: Order): Promise<void> {

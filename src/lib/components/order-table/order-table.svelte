@@ -11,7 +11,7 @@
 		type SortingState,
 		type VisibilityState
 	} from '@tanstack/table-core';
-	import type { Order } from '$lib/db/types.js';
+	import type { Order } from '$types/payments.js';
 	import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte';
 	import { FlexRender, renderSnippet } from '$lib/components/ui/data-table/index';
 	import { Badge } from '$lib/components/ui/badge/index';
@@ -31,14 +31,15 @@
 	import ArrowDownIcon from '@tabler/icons-svelte/icons/arrow-down';
 	import ArrowsUpDownIcon from '@tabler/icons-svelte/icons/arrows-up-down';
 	import {
-		STATUS_LABELS,
+		TRANS_STATUS_LABELS,
 		PROVIDER_LABELS,
 		METHOD_LABELS,
 		DEFAULT_PAGE_SIZE,
 		PAGE_SIZE_OPTIONS,
-		ORDER_STATUS_FILTER_OPTIONS,
+		ORDER_TRANS_STATUS_FILTER_OPTIONS,
 		CURRENCY_SYMBOLS
-	} from './order-table-constants.js';
+	} from '$config/order-table-constants.js';
+	import { OrderTransactionStatus } from '$types/payments.js';
 	import ClockIcon from '@tabler/icons-svelte/icons/clock';
 	import CircleDotIcon from '@tabler/icons-svelte/icons/circle-dot';
 	import CircleCheckFilledIcon from '@tabler/icons-svelte/icons/circle-check-filled';
@@ -46,6 +47,15 @@
 	import IconBrandWechat from '@tabler/icons-svelte/icons/brand-wechat';
 	import IconBrandAlipay from '@tabler/icons-svelte/icons/brand-alipay';
 	import CreditCardIcon from '@tabler/icons-svelte/icons/credit-card';
+	import CircleCheck from '@tabler/icons-svelte/icons/circle-check';
+	import {
+		IconAlertCircleFilled,
+		IconCircleCheckFilled,
+		IconCircleDashed,
+		IconCircleDotFilled,
+		IconCircleRectangleFilled,
+		IconCircleXFilled
+	} from '@tabler/icons-svelte';
 
 	let { orders = [] }: { orders: Order[] } = $props();
 
@@ -53,7 +63,7 @@
 	let sorting = $state<SortingState>([{ id: 'createdAt', desc: true }]);
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let columnVisibility = $state<VisibilityState>({ bizRefId: false });
-	let statusFilter = $state('');
+	let transStatusFilter = $state('');
 	let pageSizeSelect = $state(String(DEFAULT_PAGE_SIZE));
 
 	const columns: ColumnDef<Order>[] = [
@@ -92,10 +102,11 @@
 			meta: { class: 'text-right' }
 		},
 		{
-			accessorKey: 'status',
-			header: 'Status',
-			cell: ({ row }) => renderSnippet(OrderTableStatus, { row }),
-			filterFn: (row, _columnId, value) => (value === '' ? true : row.getValue('status') === value),
+			accessorKey: 'transStatus',
+			header: 'Trans Status',
+			cell: ({ row }) => renderSnippet(OrderTableTransStatus, { row }),
+			filterFn: (row, _columnId, value) =>
+				value === '' ? true : row.getValue('transStatus') === value,
 			enableHiding: true
 		},
 
@@ -150,47 +161,55 @@
 		}
 	});
 
-	function setStatusFilter(value: string) {
+	function setTransStatusFilter(value: string) {
 		const filterValue = value === 'all' ? '' : value;
-		statusFilter = filterValue;
+		transStatusFilter = filterValue;
 		table.setColumnFilters((prev) => {
-			const rest = prev.filter((f) => f.id !== 'status');
-			return filterValue === '' ? rest : [...rest, { id: 'status', value: filterValue }];
+			const rest = prev.filter((f) => f.id !== 'transStatus');
+			return filterValue === '' ? rest : [...rest, { id: 'transStatus', value: filterValue }];
 		});
 	}
 
-	const statusTabValue = $derived(statusFilter === '' ? 'all' : statusFilter);
-	const statusLabel = $derived(
-		ORDER_STATUS_FILTER_OPTIONS.find((o) => (o.value === '' ? 'all' : o.value) === statusTabValue)
-			?.label ?? 'ALL'
+	const transStatusTabValue = $derived(transStatusFilter === '' ? 'all' : transStatusFilter);
+	const transStatusLabel = $derived(
+		ORDER_TRANS_STATUS_FILTER_OPTIONS.find(
+			(o) => (o.value === '' ? 'all' : o.value) === transStatusTabValue
+		)?.label ?? 'ALL'
 	);
 
-	const statusOptionsWithCount = $derived(
-		ORDER_STATUS_FILTER_OPTIONS.map((opt) => {
+	const transStatusOptionsWithCount = $derived(
+		ORDER_TRANS_STATUS_FILTER_OPTIONS.map((opt) => {
 			const count =
-				opt.value === '' ? orders.length : orders.filter((o) => o.status === opt.value).length;
+				opt.value === '' ? orders.length : orders.filter((o) => o.transStatus === opt.value).length;
 			return { ...opt, tabValue: opt.value === '' ? 'all' : opt.value, count };
 		})
 	);
 </script>
 
 <div class="flex flex-col gap-4">
-	<Tabs.Root value={statusTabValue} onValueChange={(v) => v != null && setStatusFilter(v)}>
+	<Tabs.Root
+		value={transStatusTabValue}
+		onValueChange={(v) => v != null && setTransStatusFilter(v)}
+	>
 		<div class="flex items-center justify-between">
-			<Label for="order-status-selector" class="sr-only">Status</Label>
+			<Label for="order-trans-status-selector" class="sr-only">Trans Status</Label>
 			<Select.Root
 				type="single"
-				value={statusTabValue}
+				value={transStatusTabValue}
 				onValueChange={(v) => {
 					const val = (Array.isArray(v) ? v[0] : v) ?? 'all';
-					if (val) setStatusFilter(val);
+					if (val) setTransStatusFilter(val);
 				}}
 			>
-				<Select.Trigger class="flex w-fit @4xl/main:hidden" size="sm" id="order-status-selector">
-					{statusLabel}
+				<Select.Trigger
+					class="flex w-fit @4xl/main:hidden"
+					size="sm"
+					id="order-trans-status-selector"
+				>
+					{transStatusLabel}
 				</Select.Trigger>
 				<Select.Content>
-					{#each statusOptionsWithCount as opt (opt.tabValue)}
+					{#each transStatusOptionsWithCount as opt (opt.tabValue)}
 						<Select.Item value={opt.tabValue}>
 							{opt.label}
 							{#if opt.tabValue !== 'all'}
@@ -203,7 +222,7 @@
 			<Tabs.List
 				class="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex"
 			>
-				{#each statusOptionsWithCount as opt (opt.tabValue)}
+				{#each transStatusOptionsWithCount as opt (opt.tabValue)}
 					<Tabs.Trigger value={opt.tabValue}>
 						{opt.label}
 						{#if opt.tabValue !== 'all' && opt.count > 0}
@@ -391,19 +410,23 @@
 	</Badge>
 {/snippet}
 
-{#snippet OrderTableStatus({ row }: { row: Row<Order> })}
+{#snippet OrderTableTransStatus({ row }: { row: Row<Order> })}
 	<Badge variant="outline" class="inline-flex items-center gap-1 px-1.5 text-muted-foreground">
-		{#if row.original.status === 'PENDING'}
-			<ClockIcon class="size-3.5 text-yellow-500" />
-		{:else if row.original.status === 'OPEN'}
-			<CircleCheckFilledIcon class="size-3.5 fill-green-500 dark:fill-green-400" />
-		{:else if row.original.status === 'CLOSED'}
-			<CircleDotIcon class="size-3.5 text-green-500" />
-		{:else if row.original.status === 'ERROR'}
-			<CircleXFilledIcon class="size-3.5 fill-destructive text-destructive" />
+		{#if row.original.transStatus === OrderTransactionStatus.AWAITING}
+			<IconCircleDashed class="size-3.5 text-yellow-500" />
+		{:else if row.original.transStatus === OrderTransactionStatus.AUTHORIZED}
+			<IconCircleDotFilled class="size-3.5 fill-green-500 dark:fill-green-400" />
+		{:else if row.original.transStatus === OrderTransactionStatus.RELEASED}
+			<IconCircleRectangleFilled class="size-3.5 text-muted-foreground" />
+		{:else if row.original.transStatus === OrderTransactionStatus.CHARGED}
+			<IconCircleCheckFilled class="size-3.5 fill-green-500 dark:fill-green-400" />
+		{:else if row.original.transStatus === OrderTransactionStatus.REFUNDED}
+			<IconAlertCircleFilled class="size-3.5 fill-yellow-500 dark:fill-yellow-400" />
+		{:else if row.original.transStatus === OrderTransactionStatus.ERROR}
+			<IconCircleXFilled class="size-3.5 fill-destructive text-destructive" />
 		{:else}
-			<CircleDotIcon class="size-3.5 opacity-50" />
+			<IconCircleXFilled class="size-3.5 fill-destructive text-destructive" />
 		{/if}
-		{STATUS_LABELS[row.original.status] ?? row.original.status ?? '—'}
+		{TRANS_STATUS_LABELS[row.original.transStatus] ?? row.original.transStatus ?? '—'}
 	</Badge>
 {/snippet}
