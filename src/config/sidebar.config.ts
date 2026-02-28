@@ -32,63 +32,63 @@ export interface SidebarConfig {
 export const sidebarConfig: SidebarConfig = {
 	navMain: [
 		{
-			title: 'Dashboard',
-			url: '#',
+			title: '支付看板',
+			url: '/dashboard',
 			icon: DashboardIcon
-		},
-		{
-			title: 'Lifecycle',
-			url: '#',
-			icon: ListDetailsIcon
-		},
-		{
-			title: 'Analytics',
-			url: '#',
-			icon: ChartBarIcon
-		},
-		{
-			title: 'Projects',
-			url: '#',
-			icon: FolderIcon
-		},
-		{
-			title: 'Team',
-			url: '#',
-			icon: UsersIcon
 		}
+		// {
+		// 	title: 'Lifecycle',
+		// 	url: '#',
+		// 	icon: ListDetailsIcon
+		// },
+		// {
+		// 	title: 'Analytics',
+		// 	url: '#',
+		// 	icon: ChartBarIcon
+		// },
+		// {
+		// 	title: 'Projects',
+		// 	url: '#',
+		// 	icon: FolderIcon
+		// },
+		// {
+		// 	title: 'Team',
+		// 	url: '#',
+		// 	icon: UsersIcon
+		// }
 	],
 	navSecondary: [
 		{
-			title: 'Settings',
+			title: '设置',
 			url: '#',
 			icon: SettingsIcon
 		},
 		{
-			title: 'Get Help',
+			title: '获取帮助',
 			url: '#',
 			icon: HelpIcon
-		},
-		{
-			title: 'Search',
-			url: '#',
-			icon: SearchIcon
 		}
+		// {
+		// 	title: 'Search',
+		// 	url: '#',
+		// 	icon: SearchIcon
+		// }
 	],
 	documents: [
-		{
-			name: 'Data Library',
-			url: '#',
-			icon: DatabaseIcon
-		},
-		{
-			name: 'Reports',
-			url: '#',
-			icon: ReportIcon
-		},
-		{
-			name: 'Word Assistant',
-			url: '#',
-			icon: FileWordIcon
-		}
+		// 	{
+		// 		name: 'Data Library',
+		// 		url: '#',
+		// 		icon: DatabaseIcon
+		// 	},
+		// 	{
+		// 		name: 'Reports',
+		// 		url: '#',
+		// 		icon: ReportIcon
+		// 	},
+		// 	{
+		// 		name: 'Word Assistant',
+		// 		url: '#',
+		// 		icon: FileWordIcon
+		// 	}
 	]
 };

@@ -37,17 +37,14 @@
 		DEFAULT_PAGE_SIZE,
 		PAGE_SIZE_OPTIONS,
 		ORDER_TRANS_STATUS_FILTER_OPTIONS,
-		CURRENCY_SYMBOLS
+		CURRENCY_SYMBOLS,
+		ORDER_TABLE_COLUMN_HEADERS,
+		ORDER_TABLE_TEXT
 	} from '$config/order-table-constants.js';
 	import { OrderTransactionStatus } from '$types/payments.js';
-	import ClockIcon from '@tabler/icons-svelte/icons/clock';
-	import CircleDotIcon from '@tabler/icons-svelte/icons/circle-dot';
-	import CircleCheckFilledIcon from '@tabler/icons-svelte/icons/circle-check-filled';
-	import CircleXFilledIcon from '@tabler/icons-svelte/icons/circle-x-filled';
 	import IconBrandWechat from '@tabler/icons-svelte/icons/brand-wechat';
 	import IconBrandAlipay from '@tabler/icons-svelte/icons/brand-alipay';
 	import CreditCardIcon from '@tabler/icons-svelte/icons/credit-card';
-	import CircleCheck from '@tabler/icons-svelte/icons/circle-check';
 	import {
 		IconAlertCircleFilled,
 		IconCircleCheckFilled,
@@ -69,32 +66,32 @@
 	const columns: ColumnDef<Order>[] = [
 		{
 			accessorKey: 'id',
-			header: 'ID',
+			header: ORDER_TABLE_COLUMN_HEADERS.id,
 			cell: (ctx) => ctx.getValue(),
 			enableHiding: true
 		},
 		{
 			accessorKey: 'bizRefId',
-			header: 'Biz Ref ID',
+			header: ORDER_TABLE_COLUMN_HEADERS.bizRefId,
 			cell: (ctx) => ctx.getValue() ?? '—',
 			enableHiding: true
 		},
 		{
 			accessorKey: 'provider',
-			header: 'Provider',
+			header: ORDER_TABLE_COLUMN_HEADERS.provider,
 			cell: ({ row }) => renderSnippet(OrderTableProvider, { row }),
 			enableHiding: true
 		},
 		{
 			accessorKey: 'method',
-			header: 'Method',
+			header: ORDER_TABLE_COLUMN_HEADERS.method,
 			cell: ({ row }) => renderSnippet(OrderTableMethod, { row }),
 			enableHiding: true
 		},
 		{
 			id: 'amount',
 			accessorFn: (row) => `${row.amountCent} ${row.currency}`,
-			header: 'Amount',
+			header: ORDER_TABLE_COLUMN_HEADERS.amount,
 			cell: (ctx) =>
 				`${CURRENCY_SYMBOLS[ctx.row.original.currency as keyof typeof CURRENCY_SYMBOLS]} ${(ctx.row.original.amountCent / 100).toLocaleString()}`,
 			sortingFn: (rowA, rowB) => rowA.original.amountCent - rowB.original.amountCent,
@@ -102,8 +99,29 @@
 			meta: { class: 'text-right' }
 		},
 		{
+			id: 'chargedAmount',
+			accessorFn: (row) => `${row.chargedAmountCent} ${row.currency}`,
+			header: ORDER_TABLE_COLUMN_HEADERS.chargedAmount,
+			cell: (ctx) =>
+				`${CURRENCY_SYMBOLS[ctx.row.original.currency as keyof typeof CURRENCY_SYMBOLS]} ${(ctx.row.original.chargedAmountCent / 100).toLocaleString()}`,
+			sortingFn: (rowA, rowB) => rowA.original.chargedAmountCent - rowB.original.chargedAmountCent,
+			enableHiding: true,
+			meta: { class: 'text-right' }
+		},
+		{
+			id: 'refundedAmount',
+			accessorFn: (row) => `${row.refundedAmountCent} ${row.currency}`,
+			header: ORDER_TABLE_COLUMN_HEADERS.refundedAmount,
+			cell: (ctx) =>
+				`${CURRENCY_SYMBOLS[ctx.row.original.currency as keyof typeof CURRENCY_SYMBOLS]} ${(ctx.row.original.refundedAmountCent / 100).toLocaleString()}`,
+			sortingFn: (rowA, rowB) =>
+				rowA.original.refundedAmountCent - rowB.original.refundedAmountCent,
+			enableHiding: true,
+			meta: { class: 'text-right' }
+		},
+		{
 			accessorKey: 'transStatus',
-			header: 'Trans Status',
+			header: ORDER_TABLE_COLUMN_HEADERS.transStatus,
 			cell: ({ row }) => renderSnippet(OrderTableTransStatus, { row }),
 			filterFn: (row, _columnId, value) =>
 				value === '' ? true : row.getValue('transStatus') === value,
@@ -112,7 +130,7 @@
 
 		{
 			accessorKey: 'createdAt',
-			header: 'Created',
+			header: ORDER_TABLE_COLUMN_HEADERS.createdAt,
 			cell: (ctx) => {
 				const v = ctx.getValue() as string;
 				return v ? new Date(v).toLocaleString() : '—';
@@ -192,7 +210,9 @@
 		onValueChange={(v) => v != null && setTransStatusFilter(v)}
 	>
 		<div class="flex items-center justify-between">
-			<Label for="order-trans-status-selector" class="sr-only">Trans Status</Label>
+			<Label for="order-trans-status-selector" class="sr-only">
+				{ORDER_TABLE_TEXT.transStatusLabel}
+			</Label>
 			<Select.Root
 				type="single"
 				value={transStatusTabValue}
@@ -237,7 +257,7 @@
 						{#snippet child({ props })}
 							<Button variant="outline" size="sm" {...props}>
 								<LayoutColumnsIcon />
-								<span class="hidden sm:inline">Columns</span>
+								<span class="hidden sm:inline">{ORDER_TABLE_TEXT.columnsLabel}</span>
 								<ChevronDownIcon />
 							</Button>
 						{/snippet}

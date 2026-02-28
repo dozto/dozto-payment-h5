@@ -14,7 +14,8 @@ const config = {
 			$types: 'src/types',
 			$api: 'src/api',
 			$db: 'src/db',
-			$socket: 'src/socket'
+			$socket: 'src/socket',
+			$utils: 'src/utils'
 		}
 	}
 };

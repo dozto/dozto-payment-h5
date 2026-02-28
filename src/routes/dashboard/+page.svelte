@@ -24,9 +24,11 @@
 						<ChartAreaInteractive />
 					</div>
 					<div class="px-4 lg:px-6">
-						<h2 class="mb-2 text-lg font-semibold">Payments Orders</h2>
+						<h2 class="mb-2 text-lg font-semibold">订单列表</h2>
 						{#if data.syncError}
-							<p class="text-sm text-destructive">同步失败，请检查网络或稍后重试。订单列表将显示本地已缓存数据。</p>
+							<p class="text-sm text-destructive">
+								同步失败，请检查网络或稍后重试。订单列表将显示本地已缓存数据。
+							</p>
 						{/if}
 						{#if $ordersStore === undefined}
 							<p class="text-sm text-muted-foreground">Loading…</p>

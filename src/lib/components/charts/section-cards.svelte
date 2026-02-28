@@ -3,6 +3,19 @@
 	import TrendingUpIcon from '@tabler/icons-svelte/icons/trending-up';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import {
+		statsCardToday,
+		statsCardThisWeek,
+		statsCardThisMonth,
+		statsCardAov
+	} from '$store/stats.store.js';
+	import { CURRENCY_SYMBOLS } from '$config/order-table-constants.js';
+
+	const symbol = CURRENCY_SYMBOLS.CNY ?? '¥';
+
+	function formatYuan(cent: number): string {
+		return (cent / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+	}
 </script>
 
 <div
@@ -10,82 +23,130 @@
 >
 	<Card.Root class="@container/card">
 		<Card.Header>
-			<Card.Description>Total Revenue</Card.Description>
+			<Card.Description>今日收入</Card.Description>
 			<Card.Title class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-				$1,250.00
+				{symbol}{formatYuan($statsCardToday.revenueCent)}
 			</Card.Title>
 			<Card.Action>
-				<Badge variant="outline">
-					<TrendingUpIcon />
-					+12.5%
-				</Badge>
+				{#if $statsCardToday.trendPercent !== null}
+					<Badge variant="outline">
+						{#if $statsCardToday.trendPercent >= 0}
+							<TrendingUpIcon />
+							+{$statsCardToday.trendPercent.toFixed(1)}%
+						{:else}
+							<TrendingDownIcon />
+							{$statsCardToday.trendPercent.toFixed(1)}%
+						{/if}
+					</Badge>
+				{/if}
 			</Card.Action>
 		</Card.Header>
 		<Card.Footer class="flex-col items-start gap-1.5 text-sm">
 			<div class="line-clamp-1 flex gap-2 font-medium">
-				Trending up this month <TrendingUpIcon class="size-4" />
+				{$statsCardToday.trendLabel}
+				{#if $statsCardToday.trendPercent !== null && $statsCardToday.trendPercent >= 0}
+					<TrendingUpIcon class="size-4" />
+				{:else if $statsCardToday.trendPercent !== null && $statsCardToday.trendPercent < 0}
+					<TrendingDownIcon class="size-4" />
+				{/if}
 			</div>
-			<div class="text-muted-foreground">Visitors for the last 6 months</div>
+			<div class="text-muted-foreground">今日订单数：{$statsCardToday.orderCount}</div>
 		</Card.Footer>
 	</Card.Root>
 	<Card.Root class="@container/card">
 		<Card.Header>
-			<Card.Description>New Customers</Card.Description>
+			<Card.Description>本周收入</Card.Description>
 			<Card.Title class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-				1,234
+				{symbol}{formatYuan($statsCardThisWeek.revenueCent)}
 			</Card.Title>
 			<Card.Action>
-				<Badge variant="outline">
-					<TrendingDownIcon />
-					-20%
-				</Badge>
+				{#if $statsCardThisWeek.trendPercent !== null}
+					<Badge variant="outline">
+						{#if $statsCardThisWeek.trendPercent >= 0}
+							<TrendingUpIcon />
+							+{$statsCardThisWeek.trendPercent.toFixed(1)}%
+						{:else}
+							<TrendingDownIcon />
+							{$statsCardThisWeek.trendPercent.toFixed(1)}%
+						{/if}
+					</Badge>
+				{/if}
 			</Card.Action>
 		</Card.Header>
 		<Card.Footer class="flex-col items-start gap-1.5 text-sm">
 			<div class="line-clamp-1 flex gap-2 font-medium">
-				Down 20% this period <TrendingDownIcon class="size-4" />
+				{$statsCardThisWeek.trendLabel}
+				{#if $statsCardThisWeek.trendPercent !== null && $statsCardThisWeek.trendPercent >= 0}
+					<TrendingUpIcon class="size-4" />
+				{:else if $statsCardThisWeek.trendPercent !== null && $statsCardThisWeek.trendPercent < 0}
+					<TrendingDownIcon class="size-4" />
+				{/if}
 			</div>
-			<div class="text-muted-foreground">Acquisition needs attention</div>
+			<div class="text-muted-foreground">本周订单数：{$statsCardThisWeek.orderCount}</div>
 		</Card.Footer>
 	</Card.Root>
 	<Card.Root class="@container/card">
 		<Card.Header>
-			<Card.Description>Active Accounts</Card.Description>
+			<Card.Description>本月收入</Card.Description>
 			<Card.Title class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-				45,678
+				{symbol}{formatYuan($statsCardThisMonth.revenueCent)}
 			</Card.Title>
 			<Card.Action>
-				<Badge variant="outline">
-					<TrendingUpIcon />
-					+12.5%
-				</Badge>
+				{#if $statsCardThisMonth.trendPercent !== null}
+					<Badge variant="outline">
+						{#if $statsCardThisMonth.trendPercent >= 0}
+							<TrendingUpIcon />
+							+{$statsCardThisMonth.trendPercent.toFixed(1)}%
+						{:else}
+							<TrendingDownIcon />
+							{$statsCardThisMonth.trendPercent.toFixed(1)}%
+						{/if}
+					</Badge>
+				{/if}
 			</Card.Action>
 		</Card.Header>
 		<Card.Footer class="flex-col items-start gap-1.5 text-sm">
 			<div class="line-clamp-1 flex gap-2 font-medium">
-				Strong user retention <TrendingUpIcon class="size-4" />
+				{$statsCardThisMonth.trendLabel}
+				{#if $statsCardThisMonth.trendPercent !== null && $statsCardThisMonth.trendPercent >= 0}
+					<TrendingUpIcon class="size-4" />
+				{:else if $statsCardThisMonth.trendPercent !== null && $statsCardThisMonth.trendPercent < 0}
+					<TrendingDownIcon class="size-4" />
+				{/if}
 			</div>
-			<div class="text-muted-foreground">Engagement exceed targets</div>
+			<div class="text-muted-foreground">本月订单数：{$statsCardThisMonth.orderCount}</div>
 		</Card.Footer>
 	</Card.Root>
 	<Card.Root class="@container/card">
 		<Card.Header>
-			<Card.Description>Growth Rate</Card.Description>
+			<Card.Description>本月平均客单价</Card.Description>
 			<Card.Title class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-				4.5%
+				{symbol}{formatYuan($statsCardAov.revenueCent)}
 			</Card.Title>
 			<Card.Action>
-				<Badge variant="outline">
-					<TrendingUpIcon />
-					+4.5%
-				</Badge>
+				{#if $statsCardAov.trendPercent !== null}
+					<Badge variant="outline">
+						{#if $statsCardAov.trendPercent >= 0}
+							<TrendingUpIcon />
+							+{$statsCardAov.trendPercent.toFixed(1)}%
+						{:else}
+							<TrendingDownIcon />
+							{$statsCardAov.trendPercent.toFixed(1)}%
+						{/if}
+					</Badge>
+				{/if}
 			</Card.Action>
 		</Card.Header>
 		<Card.Footer class="flex-col items-start gap-1.5 text-sm">
 			<div class="line-clamp-1 flex gap-2 font-medium">
-				Steady performance increase <TrendingUpIcon class="size-4" />
+				{$statsCardAov.trendLabel}
+				{#if $statsCardAov.trendPercent !== null && $statsCardAov.trendPercent >= 0}
+					<TrendingUpIcon class="size-4" />
+				{:else if $statsCardAov.trendPercent !== null && $statsCardAov.trendPercent < 0}
+					<TrendingDownIcon class="size-4" />
+				{/if}
 			</div>
-			<div class="text-muted-foreground">Meets growth projections</div>
+			<div class="text-muted-foreground">同比上月客单价</div>
 		</Card.Footer>
 	</Card.Root>
 </div>

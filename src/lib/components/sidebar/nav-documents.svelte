@@ -14,7 +14,7 @@
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
-	<Sidebar.GroupLabel>Documents</Sidebar.GroupLabel>
+	<Sidebar.GroupLabel>订单管理</Sidebar.GroupLabel>
 	<Sidebar.Menu>
 		{#each items as item (item.name)}
 			<Sidebar.MenuItem>
@@ -61,11 +61,11 @@
 				</DropdownMenu.Root>
 			</Sidebar.MenuItem>
 		{/each}
-		<Sidebar.MenuItem>
+		<!-- <Sidebar.MenuItem>
 			<Sidebar.MenuButton class="text-sidebar-foreground/70">
 				<DotsIcon class="text-sidebar-foreground/70" />
 				<span>More</span>
 			</Sidebar.MenuButton>
-		</Sidebar.MenuItem>
+		</Sidebar.MenuItem> -->
 	</Sidebar.Menu>
 </Sidebar.Group>

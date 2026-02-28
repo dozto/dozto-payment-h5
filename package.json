@@ -48,6 +48,7 @@
 		"zod": "^4.1.13"
 	},
 	"dependencies": {
+		"dayjs": "^1.11.19",
 		"dexie": "^4.3.0",
 		"mode-watcher": "^1.1.0",
 		"qr-scanner": "^1.4.2",
