@@ -17,8 +17,7 @@ function createAlertStore() {
 	const { subscribe, set, update } = writable<AlertItem[]>([]);
 
 	function show(options: Omit<AlertItem, 'id'> & { id?: string }): string {
-		const id =
-			options.id ?? `alert-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+		const id = options.id ?? `alert-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 		const item: AlertItem = {
 			id,
 			title: options.title,

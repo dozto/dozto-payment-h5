@@ -8,14 +8,14 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-			$store: 'src/store',
-			$config: 'src/config',
-			$service: 'src/service',
-			$types: 'src/types',
-			$api: 'src/api',
-			$db: 'src/db',
-			$socket: 'src/socket',
-			$utils: 'src/utils'
+			$store: 'src/lib/stores',
+			$config: 'src/lib/config',
+			$service: 'src/lib/services',
+			$types: 'src/lib/types',
+			$api: 'src/lib/api',
+			$db: 'src/lib/db',
+			$socket: 'src/lib/socket',
+			$utils: 'src/lib/utils'
 		}
 	}
 };

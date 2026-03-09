@@ -37,10 +37,10 @@
 		DEFAULT_PAGE_SIZE,
 		PAGE_SIZE_OPTIONS,
 		ORDER_TRANS_STATUS_FILTER_OPTIONS,
-		CURRENCY_SYMBOLS,
 		ORDER_TABLE_COLUMN_HEADERS,
 		ORDER_TABLE_TEXT
-	} from '$config/order-table-constants.js';
+	} from './constants.js';
+	import { CURRENCY_SYMBOLS } from '$config/app/currency.config.js';
 	import { OrderTransactionStatus } from '$types/payments.js';
 	import IconBrandWechat from '@tabler/icons-svelte/icons/brand-wechat';
 	import IconBrandAlipay from '@tabler/icons-svelte/icons/brand-alipay';

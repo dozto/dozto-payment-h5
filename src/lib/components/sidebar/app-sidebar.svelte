@@ -6,7 +6,7 @@
 	import NavUser from './nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import type { ComponentProps } from 'svelte';
-	import { sidebarConfig } from '$config/sidebar.config.js';
+	import { sidebarConfig } from '$config/ui/sidebar.config.js';
 
 	let { ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>

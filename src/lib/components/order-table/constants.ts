@@ -51,16 +51,3 @@ export const METHOD_LABELS: Record<string, string> = {
 
 export const DEFAULT_PAGE_SIZE = 10;
 export const PAGE_SIZE_OPTIONS = [10, 20, 50];
-
-export const CURRENCY_SYMBOLS: Record<string, string> = {
-	// USD: '$',
-	CNY: '¥'
-	// EUR: '€',
-	// GBP: '£',
-	// JPY: '¥',
-	// KRW: '₩',
-	// INR: '₹',
-	// PHP: '₱',
-	// MXN: '₱',
-	// NZD: '$'
-};

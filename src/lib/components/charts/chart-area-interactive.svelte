@@ -6,7 +6,7 @@
 	import { scaleUtc } from 'd3-scale';
 	import { Area, AreaChart } from 'layerchart';
 	import { curveNatural } from 'd3-shape';
-	import { chartRangeDays, statsChartData } from '$store/stats.store.js';
+	import { chartRangeDays, statsChartData } from '$store/chart.store.js';
 
 	const strToRange = (s: string): 7 | 30 | 90 => (s === '7d' ? 7 : s === '30d' ? 30 : 90);
 

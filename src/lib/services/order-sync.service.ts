@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { env } from '$env/dynamic/public';
 import { orderRepository } from '$db/index.js';
-import { normalizeOrder, type PartialOrder } from '$db/index.js';
+import { normalizeOrder, type PartialOrder } from './order.normalizer.js';
 import { getAllPayments } from '$api/payments.js';
 
 export async function syncPaymentsFromAPI(options?: {

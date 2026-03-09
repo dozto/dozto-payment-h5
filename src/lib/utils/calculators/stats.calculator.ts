@@ -1,6 +1,3 @@
-import { derived, writable } from 'svelte/store';
-import { browser } from '$app/environment';
-import { ordersStore } from '$store/order.store.js';
 import { OrderTransactionStatus } from '$types/payments.js';
 import type { Order } from '$types/payments.js';
 import type { StatsCard, StatsChartPoint, ChartRangeDays } from '$types/stats.js';
@@ -39,7 +36,7 @@ function trendPercent(current: number, previous: number): number | null {
 	return ((current - previous) / previous) * 100;
 }
 
-function computeCardToday(orders: Order[], now: Date): StatsCard {
+export function computeCardToday(orders: Order[], now: Date): StatsCard {
 	const charged = orders.filter(isCharged);
 	const startToday = startOfDay(now);
 	const endToday = new Date(now);
@@ -63,7 +60,7 @@ function computeCardToday(orders: Order[], now: Date): StatsCard {
 	};
 }
 
-function computeCardThisWeek(orders: Order[], now: Date): StatsCard {
+export function computeCardThisWeek(orders: Order[], now: Date): StatsCard {
 	const charged = orders.filter(isCharged);
 	const weekStart = startOfWeek(now);
 	const weekEnd = new Date(now);
@@ -87,7 +84,7 @@ function computeCardThisWeek(orders: Order[], now: Date): StatsCard {
 	};
 }
 
-function computeCardThisMonth(orders: Order[], now: Date): StatsCard {
+export function computeCardThisMonth(orders: Order[], now: Date): StatsCard {
 	const charged = orders.filter(isCharged);
 	const monthStart = startOfMonth(now);
 	const monthEnd = new Date(now);
@@ -111,7 +108,7 @@ function computeCardThisMonth(orders: Order[], now: Date): StatsCard {
 	};
 }
 
-function computeCardAov(orders: Order[], now: Date): StatsCard {
+export function computeCardAov(orders: Order[], now: Date): StatsCard {
 	const charged = orders.filter(isCharged);
 	const monthStart = startOfMonth(now);
 	const monthEnd = new Date(now);
@@ -139,10 +136,13 @@ function computeCardAov(orders: Order[], now: Date): StatsCard {
 	};
 }
 
-function computeChartData(orders: Order[], rangeDays: ChartRangeDays, now: Date): StatsChartPoint[] {
+export function computeChartData(
+	orders: Order[],
+	rangeDays: ChartRangeDays,
+	now: Date
+): StatsChartPoint[] {
 	const charged = orders.filter(isCharged);
 	const points: StatsChartPoint[] = [];
-	const dayMs = 24 * 60 * 60 * 1000;
 
 	for (let i = rangeDays - 1; i >= 0; i--) {
 		const d = new Date(now);
@@ -162,60 +162,3 @@ function computeChartData(orders: Order[], rangeDays: ChartRangeDays, now: Date)
 	}
 	return points;
 }
-
-const emptyCard: StatsCard = {
-	revenueCent: 0,
-	orderCount: 0,
-	trendPercent: null,
-	trendLabel: '暂无对比'
-};
-
-const emptyChart: StatsChartPoint[] = [];
-
-function getNow(): Date {
-	return new Date();
-}
-
-export const chartRangeDays = writable<ChartRangeDays>(7);
-
-const ordersList = derived(ordersStore, ($orders) => $orders ?? []);
-
-export const statsCardToday = derived(ordersList, (orders) => {
-	if (!browser) return emptyCard;
-	return computeCardToday(orders, getNow());
-});
-
-export const statsCardThisWeek = derived(ordersList, (orders) => {
-	if (!browser) return emptyCard;
-	return computeCardThisWeek(orders, getNow());
-});
-
-export const statsCardThisMonth = derived(ordersList, (orders) => {
-	if (!browser) return emptyCard;
-	return computeCardThisMonth(orders, getNow());
-});
-
-/** 卡片 4：本月平均客单价（分），趋势为同比上月 */
-export const statsCardAov = derived(ordersList, (orders) => {
-	if (!browser) return emptyCard;
-	return computeCardAov(orders, getNow());
-});
-
-const chartDataRaw = derived(
-	[ordersList, chartRangeDays],
-	([orders, range]) => {
-		if (!browser) return emptyChart;
-		return computeChartData(orders, range, getNow());
-	}
-);
-
-/** 折线图用：保留 date 为 Date 的副本，便于 layerchart 使用（本地 0 点） */
-export const statsChartData = derived(chartDataRaw, (points) =>
-	points.map((p) => {
-		const [y, m, d] = p.date.split('-').map(Number);
-		return { ...p, date: new Date(y, m - 1, d) };
-	})
-);
-
-/** 原始按日数据（date 为 YYYY-MM-DD），供需要字符串日期的场景使用 */
-export const statsChartDataRaw = chartDataRaw;

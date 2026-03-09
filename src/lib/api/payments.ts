@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Order } from '$types/payments.js';
-import { PAYMENTS_PAGE_LIMIT } from '$config/api.config.js';
+import { PAYMENTS_PAGE_LIMIT } from '$config/app/api.config.js';
 
 export interface PageInfo {
 	limit?: number;

@@ -9,12 +9,15 @@
 		statsCardThisMonth,
 		statsCardAov
 	} from '$store/stats.store.js';
-	import { CURRENCY_SYMBOLS } from '$config/order-table-constants.js';
+	import { CURRENCY_SYMBOLS } from '$config/app/currency.config.js';
 
 	const symbol = CURRENCY_SYMBOLS.CNY ?? '¥';
 
 	function formatYuan(cent: number): string {
-		return (cent / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+		return (cent / 100).toLocaleString('zh-CN', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
 	}
 </script>
 
