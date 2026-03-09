@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import { initDb } from '$db';
+	import { startAppServices, stopAppServices } from '$lib/bootstrap/app-bootstrap.js';
 	import AlertGlobal from '$lib/components/alert-global.svelte';
-	import { initSocket } from '$socket';
 	import { ModeWatcher } from 'mode-watcher';
 
 	let { children } = $props();
 
 	onMount(() => {
-		initDb();
-		initSocket();
+		startAppServices();
+	});
+
+	onDestroy(() => {
+		stopAppServices();
 	});
 </script>
 

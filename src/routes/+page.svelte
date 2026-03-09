@@ -1,17 +1,10 @@
 <script lang="ts">
-	import { QrScanner, QrScannerOverlay } from '$lib/components/qr-scanner';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
-	function onResult(data: string) {
-		console.log(data);
-	}
-
-	function onError(err: Error) {
-		console.error(err);
-	}
+	onMount(() => {
+		goto('/dashboard');
+	});
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-
-<QrScanner {onResult} {onError} class="aspect-square max-h-[320px]">
-	<QrScannerOverlay />
-</QrScanner>
+<p>正在跳转到支付看板…</p>

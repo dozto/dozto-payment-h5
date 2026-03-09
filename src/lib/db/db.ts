@@ -25,4 +25,10 @@ export function getDb(): AppDexie {
 	return dbInstance;
 }
 
+export async function closeDb(): Promise<void> {
+	if (!dbInstance) return;
+	await dbInstance.close();
+	dbInstance = null;
+}
+
 export const db = getDb();

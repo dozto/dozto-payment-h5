@@ -19,8 +19,11 @@ export function disconnect(): void {
 	}
 }
 
-export function on(event: string, handler: (...args: unknown[]) => void): void {
+export function on(event: string, handler: (...args: unknown[]) => void): () => void {
 	socket?.on(event, handler);
+	return () => {
+		socket?.off(event, handler);
+	};
 }
 
 export function off(event: string, handler?: (...args: unknown[]) => void): void {

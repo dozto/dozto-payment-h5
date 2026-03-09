@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index';
 	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
 	import SiteHeader from '$lib/components/site-header.svelte';
@@ -7,16 +6,10 @@
 	import ChartAreaInteractive from '$lib/components/charts/chart-area-interactive.svelte';
 	import { OrderTable } from '$lib/components/order-table';
 	import { ordersStore } from '$store/order.store.js';
-	import { syncPaymentsFromAPI } from '$service/order-sync.service.js';
+	let { data }: { data: { syncError: boolean; syncMessage?: string } } = $props();
 
-	let syncError = $state(false);
-
-	onMount(() => {
-		syncPaymentsFromAPI().catch((err) => {
-			console.error('[dashboard] syncPaymentsFromAPI failed', err);
-			syncError = true;
-		});
-	});
+	const syncError = $derived(data.syncError);
+	const syncMessage = $derived(data.syncMessage ?? '');
 </script>
 
 <Sidebar.Provider
@@ -36,7 +29,7 @@
 						<h2 class="mb-2 text-lg font-semibold">订单列表</h2>
 						{#if syncError}
 							<p class="text-sm text-destructive">
-								同步失败，请检查网络或稍后重试。订单列表将显示本地已缓存数据。
+								同步失败，请检查网络或稍后重试。{syncMessage}
 							</p>
 						{/if}
 						{#if $ordersStore === undefined}

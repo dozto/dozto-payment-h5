@@ -4,6 +4,7 @@ import { browser } from '$app/environment';
 export interface User {
 	name: string;
 	email: string;
+	orgId?: string;
 	avatar?: string;
 }
 
@@ -11,12 +12,22 @@ export interface User {
 const getInitialUser = (): User | null => {
 	if (!browser) return null;
 	const stored = localStorage.getItem('user');
-	return stored
-		? JSON.parse(stored)
-		: {
-				name: 'Guest',
-				email: 'guest@example.com'
-			};
+	if (!stored) {
+		return {
+			name: 'Guest',
+			email: 'guest@example.com'
+		};
+	}
+
+	try {
+		return JSON.parse(stored) as User;
+	} catch {
+		localStorage.removeItem('user');
+		return {
+			name: 'Guest',
+			email: 'guest@example.com'
+		};
+	}
 };
 
 // 创建 store

@@ -7,7 +7,6 @@ import type { Readable } from 'svelte/store';
 export async function initDb(): Promise<void> {
 	if (!browser) return;
 	await getDb().open();
-	console.log('[db] initialized.');
 }
 
 export function liveQueryToStore<T>(
@@ -19,7 +18,6 @@ export function liveQueryToStore<T>(
 		const sub = observable.subscribe({
 			next: set,
 			error: (err) => {
-				console.error('[db] liveQuery error', err);
 				onError?.(err instanceof Error ? err : new Error(String(err)));
 			}
 		});
